@@ -1,8 +1,24 @@
 import { Request, Response } from "express";
 import router from "../routes";
+import { pet } from "../models/pet";
+import { createMenuObject } from "../helpers/createMenuObject";
+
 
 export const search = (req:Request, res:Response)=>{
-    res.send('PAGINA DE SEARCH')
-    //res.render('pages/search');
+    let query: string = req.query.q as string
+
+    if (!query) {
+        res.redirect('/')
+        return
+    }
+
+    let list = pet.getFromName(query)
+
+    res.render('pages/page', {
+        menu: createMenuObject(''),
+        list,
+        query
+    })
+        
 }
 
